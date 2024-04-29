@@ -37,6 +37,13 @@ async function run() {
     // await client.connect();
 
     const countryCollection = client.db('countryDataDB').collection('country');
+    const countriesCollection = client.db('countryDataDB').collection('countries');
+
+    app.get('/countries', async(req, res) =>{
+      const cursor = countriesCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    })
 
     app.get('/travel', async(req, res) =>{
       const cursor = countryCollection.find();
