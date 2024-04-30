@@ -51,12 +51,42 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/travel/:id', async(req, res) =>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await countryCollection.findOne(query);
+      res.send(result);
+
+    })
+
     app.post('/travel', async(req, res) =>{
       const newTravel = req.body;
       console.log(newTravel)
       const result = await countryCollection.insertOne(newTravel);
       res.send(result)
 
+    })
+
+    app.put('/travel/:id', async(req, res) =>{
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)}
+      const options = {upsert: true};
+      const update= req.body;
+      const updateAdd ={
+        $set: {
+          name:update.name, 
+          countryName:update.countryName, 
+          location:update.location, 
+          description:update.description, 
+          seasonality:update.seasonality, 
+          travelTime:update.travelTime, 
+          totalVisitors:update.totalVisitors, 
+          image:update.image, 
+          average:update.average
+        }
+      }
+      const result = await countryCollection.updateOne(filter, updateAdd, options);
+      res.send(result); 
     })
 
     app.delete('/travel/:id', async(req, res) =>{
