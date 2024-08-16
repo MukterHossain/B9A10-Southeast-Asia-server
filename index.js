@@ -32,28 +32,62 @@ async function run() {
    
     const countryCollection = client.db('countryDataDB').collection('country');
     const countriesCollection = client.db('countryDataDB').collection('countries');
+    const pituresCollection = client.db('countryDataDB').collection('pitures');
+
+
 
     app.get('/countries', async(req, res) =>{
       const cursor = countriesCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     })
+    app.get('/countries/:id', async(req, res) =>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await countriesCollection.findOne(query);
+      res.send(result)
+    })
+    app.get('/selectedCountry/:countryName', async(req, res) =>{
+      const countryName = req.params.countryName;
+      const query = {countryName: countryName}  
+      console.log(query)      
+      const result = await countryCollection.find(query).toArray();
+      console.log(result)
+      res.send(result);
 
-    app.get('/travel', async(req, res) =>{
+    })
+    app.get('/selectedDetails/:countryName', async(req, res) =>{
+      const countryName = req.params.countryName;
+      const query = {countryName: countryName}  
+      console.log(query)      
+      const result = await countryCollection.findOne(query);
+      console.log(result)
+      res.send(result);
+
+    })
+ 
+
+    app.get('/country', async(req, res) =>{
       const cursor = countryCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     })
 
-    app.get('/travel/:id', async(req, res) =>{
+    app.get('/country/:id', async(req, res) =>{
       const id = req.params.id;
       const query = {_id: new ObjectId(id)}
       const result = await countryCollection.findOne(query);
       res.send(result);
 
     })
+    app.get('/pictures', async(req, res) =>{
+      const cursor = pituresCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    })
 
-    app.post('/travel', async(req, res) =>{
+
+    app.post('/country', async(req, res) =>{
       const newTravel = req.body;
       console.log(newTravel)
       const result = await countryCollection.insertOne(newTravel);
@@ -61,7 +95,7 @@ async function run() {
 
     })
 
-    app.put('/travel/:id', async(req, res) =>{
+    app.put('/country/:id', async(req, res) =>{
       const id = req.params.id;
       const filter = {_id: new ObjectId(id)}
       const options = {upsert: true};
@@ -83,7 +117,7 @@ async function run() {
       res.send(result); 
     })
 
-    app.delete('/travel/:id', async(req, res) =>{
+    app.delete('/country/:id', async(req, res) =>{
       const id = req.params.id;
       const query = {_id: new ObjectId(id)}
       const result = await countryCollection.deleteOne(query);
