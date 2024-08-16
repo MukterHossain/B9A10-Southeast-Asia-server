@@ -49,19 +49,15 @@ async function run() {
     })
     app.get('/selectedCountry/:countryName', async(req, res) =>{
       const countryName = req.params.countryName;
-      const query = {countryName: countryName}  
-      console.log(query)      
+      const query = {countryName: countryName}       
       const result = await countryCollection.find(query).toArray();
-      console.log(result)
       res.send(result);
 
     })
     app.get('/selectedDetails/:countryName', async(req, res) =>{
       const countryName = req.params.countryName;
-      const query = {countryName: countryName}  
-      console.log(query)      
+      const query = {countryName: countryName}      
       const result = await countryCollection.findOne(query);
-      console.log(result)
       res.send(result);
 
     })
@@ -89,7 +85,6 @@ async function run() {
 
     app.post('/country', async(req, res) =>{
       const newTravel = req.body;
-      console.log(newTravel)
       const result = await countryCollection.insertOne(newTravel);
       res.send(result)
 
